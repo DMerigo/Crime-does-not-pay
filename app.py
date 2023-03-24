@@ -15,7 +15,11 @@ px.set_mapbox_access_token(mapbox_access_token)
 app = dash.Dash(__name__, meta_tags=[{"name": "viewport",
                 "content": "width=device-width, initial-scale=1"}])
 
+
 app.title = 'Crime does not Pay'
+
+server = app.server
+app.config.suppress_callback_exceptions = True
 
 # Path to dataset
 
@@ -179,7 +183,8 @@ def update_state(state, feature):
                             center = center,
                             zoom = zoom,
                             height = 500,
-                            color_continuous_scale = 'viridis')
+                            color_continuous_scale = 'viridis',
+                            labels = {feature : features_trans[feature]})
     fig.update_layout(mapbox_style="dark",
                       margin={"r": 0, "t": 0, "l": 0, "b": 0})
     return fig
@@ -234,9 +239,12 @@ def update_corr(state):
         filtered_data = crime_data[crime_data['state'] == state]
     
     filtered_data = filtered_data.drop(['latitude', 'longitude'], axis = 1)
+    filtered_data = filtered_data.rename(columns = {'population' : 'Population', 'medIncome' : 'Median Income',
+                                                     'PctPopUnderPov' : 'Percentage Population Under Poverty Line',
+                                                     'PctUnemployed' : 'Percentage Population Unemployed',
+                                                     'violent_crime_rate' : 'Violent Crime Rate'}, inplace= False)
 
     corr_matrix = filtered_data.corr()
-
     fig = ff.create_annotated_heatmap(
         x = list(corr_matrix.columns),
         y = list(corr_matrix.index),

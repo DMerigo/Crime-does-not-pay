@@ -1,0 +1,34 @@
+---
+title: "Improvements and Bugs"
+author: "Daniel Merigo"
+date: "2023-03-24"
+output: html_document
+---
+
+No project is perfect so I have come up with a list of improvements and also took note of possible bugs in this dashboard
+
+## Improvements
+
+### UI
+
+1.  Add a background color that does not clash with the dark theme
+
+    1.  Possibly add a darkmode toggle
+
+2.  Add background cards to better visualize separation between plots
+
+3.  Add the possibility to show all communities in the United States when 'All' is selected in States and revert to top 10 when a State is selected
+
+### New Graphs
+
+1.  Add a radar graph or donut chart to show community demographic composition
+
+2.  Add a choropleth
+
+3.  Add 3D capabilities
+
+4.  Add a downloadable data table
+
+## Bugs
+
+1.  The UI is not rendering double columns as programmed in the code

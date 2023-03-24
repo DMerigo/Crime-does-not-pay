@@ -66,6 +66,8 @@ A browser window should open soon with the dashboard
 
 Interested in contributing? Check out the contributing guidelines [here](https://github.com/DMerigo/Crime-does-not-pay/blob/main/CONTRIBUTING). We would love to know what other datasets we can bring into our dashboard to make it more useful. Please also feel free to offer suggestions on other interactive options you'd like to see. Please note that this project is released with a [Code of Conduct](https://github.com/DMerigo/Crime-does-not-pay/blob/main/CODE_OF_CONDUCT). By contributing to this project, you agree to abide by its terms.
 
+Check out the
+
 ## License
 
 This dashboard was created by Daniel Merigo This dashboard is licensed under the MIT license as explained [here](https://github.com/DMerigo/Crime-does-not-pay/blob/main/LICENSE)

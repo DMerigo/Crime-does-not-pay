@@ -12,8 +12,7 @@ mapbox_access_token = 'pk.eyJ1IjoibWVyaWdvIiwiYSI6ImNsZmxsMWc5cjAyd3UzcXF6bDZuaG
 
 px.set_mapbox_access_token(mapbox_access_token)
 
-app = dash.Dash(__name__, meta_tags=[{"name": "viewport",
-                "content": "width=device-width, initial-scale=1"}])
+app = dash.Dash(__name__)
 
 
 app.title = 'Crime does not Pay'
@@ -42,6 +41,14 @@ features_trans = {
 
 }
 
+features_control = {
+    'population' : 'Population',
+    'medIncome' : 'Median Income',
+    'violent_crime_rate' : 'Violent Crime Rate',
+    'PctPopUnderPov' : 'Percentage under Poverty Line',
+    'PctUnemployed' : 'Percentage Unemployed'
+}
+
 communities_list = crime_data['area'].unique()
 states_list = crime_data['state'].unique()
 features = ['Population', 'Median Income', 'Violent Crime Rate']
@@ -55,17 +62,6 @@ initial_zoom = 3
 initial_center = {'lat' : 39.8, 'lon' : 260}
 feat_selected = 'violent_crime_rate'
 
-# Define Graphics (Map, Correlation plot, composition)
-
-# map_heat = px.density_mapbox(crime_data, lat='latitude', lon='longitude', z='violent_crime_rate', radius=10,
-#                         center = initial_center, zoom= initial_zoom,
-#                         color_continuous_scale = 'viridis',
-#                         mapbox_style="dark",
-#                         hover_data = ['Population', 'Median Income'],
-#                         height = 540,
-#                         width = 860)
-
-
 # Control Panel
 
 def app_control():
@@ -75,7 +71,7 @@ def app_control():
 
     return html.Div(
         id = 'control_panel',
-        style = {'height' : '100%', 'width': '100%'},
+        style = {'height' : '100%', 'width': '20%'},
         children = [
             html.P('Select State'),
             dcc.Dropdown(id = 'state selection', options = [{'label' : opt, 'value' : opt} for opt in states_list],
@@ -85,10 +81,10 @@ def app_control():
             html.Br(),
             html.Br(),
             html.P('Select the Feature to Visualize'),
-            dcc.Dropdown(id = 'feature selection', options = [{'label' : features_trans[i], 'value' : i} for i in features_trans], 
+            dcc.Dropdown(id = 'feature selection', options = [{'label' : features_trans[i], 'value' : i} for i in features_control], 
                 value = 'violent_crime_rate',
-            ),
-        ],
+            )
+        ]
 )
 
 # Explanation of the app
@@ -116,12 +112,12 @@ app.layout = html.Div(
     children = [
         html.Div(
             id = 'control_area',
-            className = 'four columns',
+            className = 'intro',
             children = [app_intro(), app_control()]
         ),
         html.Div(
             id = 'map_area',
-            className = 'eight columns',
+            className = 'vertical columns map',
             children = [
                 html.Div(
                     id = 'heat_color_map',
@@ -135,10 +131,10 @@ app.layout = html.Div(
                                                 html.Hr(),
                                                 dcc.Graph(id = 'actual_map', figure = {})
                                                 ])]),
-                                    dcc.Tab(label = 'Heatmap', value = 'tab-2',
+                                    dcc.Tab(label = 'Correlation Plot', value = 'tab-2',
                                         children = [
                                             html.Div([
-                                                html.B('Correlation Map'),
+                                                html.B('Correlation Plot'),
                                                 dcc.Graph(id = 'corr_chart', figure = {})
                                                 ])]),
                                             ]),
@@ -210,7 +206,6 @@ def update_bar(state, feature):
         feat_selected = feature
     
     # Prepare top 10
-    # ready = filtered_data.groupby(feat_selected).sum()
     ready = filtered_data.sort_values(by = feat_selected, axis = 0, ascending = False)
     ready = ready.iloc[0:10,:]
 
